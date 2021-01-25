@@ -1,0 +1,17 @@
+/* *{
+    background: rgba(0, 0, 0, 0.1);
+} */
+body{
+    background: rgb(45, 8, 92);
+    color: #fff;
+}
+h1{
+    text-align: center;
+}
+.container{
+    max-width: 700px;
+    margin: 0 auto;
+}
+.task-item{
+    padding: 10px;
+}
