@@ -12,34 +12,20 @@
     <div class="container">
         <h1>我的Todo List</h1>
         <div class="add-task"> <!--新增任务开始-->
-            <input type="text" name="content" placeholder="新增今天的Todo">
+            <input type="text" 
+                   name="content" 
+                   placeholder="新增今天的Todo"
+                   autofocus
+                   autocomplete="off">
             <button type="submit" class="submit">Submit</button>
         </div> <!--新增任务结束-->
         <div class="task-list"><!--任务列表开始-->
-            <div class="task-item">
+            <!-- <div class="task-item">
                 <span><input type="checkbox"></span>
                 <span class="task-content">item content 1</span>
                 <span>delete</span>
                 <span>detail</span>
-            </div>
-            <div class="task-item">
-                <span><input type="checkbox"></span>
-                <span class="task-content">item content 1</span>
-                <span>delete</span>
-                <span>detail</span>
-            </div>
-            <div class="task-item">
-                <span><input type="checkbox"></span>
-                <span class="task-content">item content 1</span>
-                <span>delete</span>
-                <span>detail</span>
-            </div>
-            <div class="task-item">
-                <span><input type="checkbox"></span>
-                <span class="task-content">item content 1</span>
-                <span>delete</span>
-                <span>detail</span>
-            </div>
+            </div> -->
         </div><!--任务列表结束-->
         <div class="task-detail-mask"></div>
         <div class="task-detail"> <!--任务详情开始-->
@@ -58,6 +44,7 @@
         </div><!--任务详情结束-->
         
     </div>
+    <script src="node_modules/store/dist/store.legacy.min.js"></script>
     <script src="node_modules/jquery/dist/jquery.js"></script>
     <script src="js/base.js"></script>
 </body>

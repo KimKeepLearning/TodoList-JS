@@ -20,6 +20,7 @@ h1{
     max-width: 700px;
     margin: 0 auto;
     position: relative;
+    padding: 0 10px;
 }
 .task-list{
     margin: 10px 0;
@@ -113,4 +114,17 @@ button{
 }
 .task-detail, .task-detail-mask{
     display: none;
+}
+.action {
+    color: #888888;
+    font-size: 90%;
+}
+.action:hover{
+    color: #444;
+}
+.fr{
+    float: right;
+}
+.task-content{
+    margin-left: 10px;
 }
