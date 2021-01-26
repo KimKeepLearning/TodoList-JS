@@ -1,6 +1,14 @@
 /* *{
     background: rgba(0, 0, 0, 0.1);
 } */
+*{
+    box-sizing: border-box;
+    -webkit-transition: background .2s ;
+    -moz-transition:background .2s ;
+    -o-transition:background .2s ;
+    transition:background .2s ;
+    outline: 0;
+}
 body{
     background: rgb(45, 8, 92);
     color: #fff;
@@ -11,7 +19,98 @@ h1{
 .container{
     max-width: 700px;
     margin: 0 auto;
+    position: relative;
+}
+.task-list{
+    margin: 10px 0;
+}
+input, 
+.task-item, 
+textarea,
+.task-detail-mask, 
+button{
+    padding: 10px;
+    border-radius: 6px;
+}
+textarea{
+    min-height: 100px;
+}
+.add-task input[type="text"]{
+    float: left;
+    width: 84%;
+    margin-right: 1%;
+}
+.add-task [type="submit"]{
+    width: 15%;
+    background: rgb(241, 171, 41);
+    box-shadow:0 2px 3px rgba(0, 0, 0, .4);
+}
+.add-task [type="submit"]:hover{
+    background-color: rgb(243, 198, 115);
 }
 .task-item{
+    background: #fff;
+    color: #333;
+    margin-bottom: 2px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, .4);
+    cursor: pointer;
+    -webkit-transition: background .2s ;
+    -moz-transition:background .2s ;
+    -o-transition:background .2s ;
+    transition:background .2s ;
+}
+.task-item:hover{
+    background: #eee; 
+}
+
+textarea,
+input[type="text"], input[type="data"]{
+    border: none;
+    display: block;
+    width: 100%;
+    background: #eee;
+}
+input[type="text"]:hover, 
+input[type="text"]:focus, 
+input[type="data"]:focus,
+input[type="data"]:hover{
+    background: #fff;
+}
+button{
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    color: #333;
+}
+.task-detail{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #fff;
     padding: 10px;
+    width: 50%;
+    height: 100%;
+    color:#333;
+}
+.task-detail>*{
+    margin-top: 10px;
+}
+.task-detail .content {
+    padding: 10px;
+    font-weight: 900;
+    cursor: pointer;
+}
+.task-detail .remind input[type="date"]{
+    width: 100%;
+}
+.task-detail-mask{
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: rgba(30, 30, 30, .6);
+}
+.task-detail, .task-detail-mask{
+    display: none;
 }
