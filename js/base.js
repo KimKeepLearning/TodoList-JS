@@ -3,7 +3,9 @@
 
     var $form_add_task = $('.add-task'),
         $add_button = $('.add-task .submit'),
-        $delete_task;
+        $delete_task,$detail_task,
+        $task_detail = $(".task-detail"),
+        $task_detail_mask = $('.task-detail-mask');
     var task_list =[];
     
 
@@ -18,9 +20,8 @@
         if (addTask(new_task)) {
             $input.val('');
         }
-
-
     });
+    $task_detail_mask.on("click", hideTaskDetail);
     function listenTaskDelete() {
         $delete_task.on("click", function (e) {
             var $this = $(this);
@@ -30,8 +31,25 @@
             deleteComfirm ? deleteTask(index) : null;
         });    
     }
-    
+    function listenTaskDetail() {
+        $detail_task.on("click", function (e) {
+            //显示mask和detail
+            var $this = $(this);
+            var $item = $this.parent().parent();
+            var index = $item.data("index");
+            showTaskDetail(index);
+        })
+    }
 
+    function showTaskDetail(index) {
+        render_task_detail(index);
+        $task_detail.show();
+        $task_detail_mask.show();
+    }
+    function hideTaskDetail() {
+        $task_detail.hide();
+        $task_detail_mask.hide();
+    }
     function addTask(new_task) {
         task_list.push(new_task);
         refreshTaskList();
@@ -64,7 +82,9 @@
             $task_list.append($task);
         }
         $delete_task = $(".action.delete");
+        $detail_task = $(".action.detail");
         listenTaskDelete();
+        listenTaskDetail();
     }
     function render_task_tpl(data, index) {
         if (!data || !index) return;
@@ -74,11 +94,27 @@
             '<span class="task-content">' + data.content + '</span>' +
             '<span class="fr">' +
                 '<span class="action delete"> 删除</span>' +
-                '<span class="action"> 详情</span>' +
+                '<span class="action detail"> 详情</span>' +
             '</span>' +
             '</div>';
-        
         return list_item_tpl;
     }
-
+    function render_task_detail(index) {
+        if (index === undefined || !task_list[index]) return;
+        var item = task_list[index];
+        var tpl =
+            '<div>' +
+                '<div class="content">'+item.content+'</div>' +
+                '<div>' +
+                    '<div class="desc">' +
+                        '<textarea value="'+item.desc+'"></textarea>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="remind">' +
+                    '<input type="date">' +
+                '</div>' +
+            '</div>';
+        $task_detail.html('');
+        $task_detail.html(tpl);
+    }
 })();
