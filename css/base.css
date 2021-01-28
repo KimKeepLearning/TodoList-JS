@@ -29,6 +29,7 @@ input,
 .task-item, 
 textarea,
 .task-detail-mask, 
+.task-detail, 
 button{
     padding: 10px;
     border-radius: 6px;
@@ -90,10 +91,10 @@ button{
     background: #fff;
     padding: 10px;
     width: 50%;
-    height: 100%;
+    height: 300px;
     color:#333;
 }
-.task-detail>*{
+.task-detail div{
     margin-top: 10px;
 }
 .task-detail .content {
@@ -127,4 +128,20 @@ button{
 }
 .task-content{
     margin-left: 10px;
+}
+
+.task-item.completed{
+    color: #aaa;
+    /* background: rgba(255, 255, 255, .8); */
+    opacity: 0.6;
+}
+.task-item.completed:after{
+    content: "";
+    display: block;
+    width: 96%;
+    height: 1px;
+    background: #aaa;
+    position: relative;
+    top: -8px;
+    float: right;
 }

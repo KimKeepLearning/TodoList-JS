@@ -5,9 +5,13 @@
         $add_button = $('.add-task .submit'),
         $delete_task,$detail_task,
         $task_detail = $(".task-detail"),
-        $task_detail_mask = $('.task-detail-mask');
+        $task_detail_mask = $('.task-detail-mask'),
+        $update_form,
+        $task_detail_content,
+        $task_detail_conent_input,
+        $checkbox_complete,
+        current_index;
     var task_list =[];
-    
 
     init();
     $add_button.on("click", function (e) {
@@ -22,6 +26,7 @@
         }
     });
     $task_detail_mask.on("click", hideTaskDetail);
+
     function listenTaskDelete() {
         $delete_task.on("click", function (e) {
             var $this = $(this);
@@ -32,24 +37,59 @@
         });    
     }
     function listenTaskDetail() {
+
+        $(".task-item").on("dblclick", function (e) {
+            var index = $(this).data("index");
+            showTaskDetail(index);
+        })
+
         $detail_task.on("click", function (e) {
             //显示mask和detail
             var $this = $(this);
             var $item = $this.parent().parent();
             var index = $item.data("index");
             showTaskDetail(index);
-        })
+        });
+    }
+    function listenCheckboxComplete() {
+        $checkbox_complete.on("click", function () {
+            var $this = $(this);
+            var index = $this.parent().parent().data("index");
+            var item = get(index);
+            if (item.complete) {
+                updateTask(index, { complete: false });
+            } else {
+                updateTask(index, { complete: true });
+            }
+        });
+    }
+
+    function get(index) {
+        return store.get('task_list')[index];
     }
 
     function showTaskDetail(index) {
         render_task_detail(index);
         $task_detail.show();
         $task_detail_mask.show();
+        current_index = index;
     }
     function hideTaskDetail() {
         $task_detail.hide();
         $task_detail_mask.hide();
     }
+
+    function updateTask(index, data) {
+        if (index === undefined || !task_list[index]) return;
+
+        task_list[index] = $.extend({}, task_list[index], data);
+        // task_list[index] = data;
+        refreshTaskList();
+
+    }
+
+    
+
     function addTask(new_task) {
         task_list.push(new_task);
         refreshTaskList();
@@ -77,44 +117,95 @@
     function render_task_list() {
         var $task_list = $('.task-list');
         $task_list.html('');
+        // for (let i = 0; i < task_list.length; i++){
+        //     var item = task_list[i];
+        //     if (item === null) continue;
+        //     var $task = render_task_tpl(item, i);
+        //     if (item.complete) {
+        //         $task.addClass("completed");
+        //         $task_list.append($task);
+        //     } else {
+        //         $task_list.prepend($task);
+        //     }
+        // }
+
+        var taks_complete = [];
         for (let i = 0; i < task_list.length; i++){
-            var $task = render_task_tpl(task_list[i], i);
+            var item = task_list[i];
+            if (!item) continue;
+            if (item.complete) {
+                taks_complete[i]=item;
+            } else {
+                var $task = render_task_tpl(item, i);
+                $task_list.prepend($task);
+            }
+        }
+
+        for (let j = 0; j < taks_complete.length; j++){
+            item = taks_complete[j];
+            if (!item) continue;
+            $task = render_task_tpl(item, j);
+            if (!$task) continue;
+            $task.addClass("completed");
             $task_list.append($task);
         }
+
+
         $delete_task = $(".action.delete");
         $detail_task = $(".action.detail");
+        $checkbox_complete = $('.task-list .complete');
         listenTaskDelete();
         listenTaskDetail();
+        listenCheckboxComplete();
     }
     function render_task_tpl(data, index) {
         if (!data || !index) return;
         var list_item_tpl =
             '<div class="task-item" data-index="'+ index+'">' +
-            '<span><input type="checkbox"></span>' +
+            '<span><input class="complete"'+(data.complete?"checked":"")+' type="checkbox"></span>' +
             '<span class="task-content">' + data.content + '</span>' +
             '<span class="fr">' +
                 '<span class="action delete"> 删除</span>' +
                 '<span class="action detail"> 详情</span>' +
             '</span>' +
             '</div>';
-        return list_item_tpl;
+        return $(list_item_tpl);
     }
     function render_task_detail(index) {
         if (index === undefined || !task_list[index]) return;
         var item = task_list[index];
         var tpl =
+            '<form>' +
+            '<div class="content">' + item.content + '</div>' +
+            '<div><input style="display:none;" type="text" name="content" value="'+item.content+'"></div>' +
             '<div>' +
-                '<div class="content">'+item.content+'</div>' +
-                '<div>' +
-                    '<div class="desc">' +
-                        '<textarea value="'+item.desc+'"></textarea>' +
-                    '</div>' +
-                '</div>' +
-                '<div class="remind">' +
-                    '<input type="date">' +
-                '</div>' +
-            '</div>';
+            '<div class="desc">' +
+            '<textarea name="desc" >' + (item.desc || '') + '</textarea>' +
+            '</div>' +
+            '</div>' +
+            '<div class="remind">' +
+            '<input name="remind_data" type="date" value="'+item.remind_data+'">' +
+            '</div>' +
+            '<div><button type="submit">更新</button></div>' +
+            '</form>';
         $task_detail.html('');
         $task_detail.html(tpl);
+        $update_form = $task_detail.find('form');
+        $task_detail_content = $update_form.find(".content");
+        $task_detail_conent_input = $update_form.find("[name=content]");
+        $task_detail_content.on("dblclick", function (e) {
+            $task_detail_conent_input.show();
+            $task_detail_content.hide();
+        });
+
+        $update_form.on("submit", function (e) {
+            e.preventDefault();
+            var data = {};
+            data.content = $(this).find("[name=content]").val();
+            data.desc = $(this).find("[name=desc").val();
+            data.remind_data = $(this).find("[name=remind_data]").val();
+            updateTask(index, data);
+            hideTaskDetail();
+        });
     }
 })();
