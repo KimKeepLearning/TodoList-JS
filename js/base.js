@@ -112,8 +112,34 @@
         if (task_list.length) {
             render_task_list();
         }
-        
+        task_remind_check();
     }
+    function task_remind_check() {
+        var current_timestamp;
+        var itl = setInterval(function () {
+            for (var i = 0; i < task_list.length; i++) {
+                var item = get(i), task_timestamp;
+                if (!item || !item.remind_data || item.informed) continue;
+
+                current_timestamp = (new Date()).getTime();
+                task_timestamp = (new Date(item.remind_data)).getTime();
+
+                if (current_timestamp - task_timestamp >= 1) {
+                    updateTask(i, { informed: true });
+                    showMsg(item.content);
+                }
+            }
+        }, 300);
+    }
+
+    function showMsg(msg) {
+        $(".msg").html(msg).show();
+    }
+
+    function hideMsg() {
+        $(".msg").hide();
+    }
+
     function render_task_list() {
         var $task_list = $('.task-list');
         $task_list.html('');
@@ -184,15 +210,19 @@
             '</div>' +
             '</div>' +
             '<div class="remind">' +
-            '<input name="remind_data" type="date" value="'+item.remind_data+'">' +
+            '<label>设置提醒时间</label>'+
+            '<input class="datetime" name="remind_data" type="text" value="'+(item.remind_data||'')+'">' +
             '</div>' +
             '<div><button type="submit">更新</button></div>' +
             '</form>';
         $task_detail.html('');
         $task_detail.html(tpl);
+        $(".datetime").datetimepicker();
+
         $update_form = $task_detail.find('form');
         $task_detail_content = $update_form.find(".content");
         $task_detail_conent_input = $update_form.find("[name=content]");
+
         $task_detail_content.on("dblclick", function (e) {
             $task_detail_conent_input.show();
             $task_detail_content.hide();

@@ -145,3 +145,9 @@ button{
     top: -8px;
     float: right;
 }
+.msg{
+    display: none;
+    text-align: center;
+    background: purple;
+    padding: 10px;
+}
