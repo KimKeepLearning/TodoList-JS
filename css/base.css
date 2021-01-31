@@ -148,6 +148,8 @@ button{
 .msg{
     display: none;
     text-align: center;
-    background: purple;
+    background: rgb(253, 228, 84);
     padding: 10px;
+    cursor: pointer;
+    color: #333;
 }

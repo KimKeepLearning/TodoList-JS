@@ -3,13 +3,16 @@
 
     var $form_add_task = $('.add-task'),
         $add_button = $('.add-task .submit'),
-        $delete_task,$detail_task,
+        $delete_task, $detail_task,
         $task_detail = $(".task-detail"),
         $task_detail_mask = $('.task-detail-mask'),
         $update_form,
         $task_detail_content,
         $task_detail_conent_input,
         $checkbox_complete,
+        $msg = $('.msg'),
+        $msg_content = $('.msg .msg-content'),
+        $msg_confirm = $('.msg .confirmed'),
         current_index;
     var task_list =[];
 
@@ -34,14 +37,14 @@
             var index = $item.data('index');
             var deleteComfirm = confirm("确定删除？");
             deleteComfirm ? deleteTask(index) : null;
-        });    
+        });
     }
     function listenTaskDetail() {
 
         $(".task-item").on("dblclick", function (e) {
             var index = $(this).data("index");
             showTaskDetail(index);
-        })
+        });
 
         $detail_task.on("click", function (e) {
             //显示mask和detail
@@ -63,7 +66,11 @@
             }
         });
     }
-
+    function listenMsgEvent() {
+        $msg_confirm.on("click", function (e) { 
+            hideMsg();
+        });
+    }
     function get(index) {
         return store.get('task_list')[index];
     }
@@ -109,10 +116,12 @@
     }
     function init() {
         task_list = store.get('task_list') || [];
+        listenMsgEvent();
         if (task_list.length) {
             render_task_list();
         }
         task_remind_check();
+        
     }
     function task_remind_check() {
         var current_timestamp;
@@ -124,6 +133,7 @@
                 current_timestamp = (new Date()).getTime();
                 task_timestamp = (new Date(item.remind_data)).getTime();
 
+                console.log(current_timestamp, task_timestamp, current_timestamp - task_timestamp >= 1)
                 if (current_timestamp - task_timestamp >= 1) {
                     updateTask(i, { informed: true });
                     showMsg(item.content);
@@ -133,11 +143,14 @@
     }
 
     function showMsg(msg) {
-        $(".msg").html(msg).show();
+        console.log("showing...");
+        console.log($msg_content);
+        $msg_content.html(msg);
+        $msg.show();
     }
 
     function hideMsg() {
-        $(".msg").hide();
+        $msg.hide();
     }
 
     function render_task_list() {
