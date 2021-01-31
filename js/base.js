@@ -156,17 +156,6 @@
     function render_task_list() {
         var $task_list = $('.task-list');
         $task_list.html('');
-        // for (let i = 0; i < task_list.length; i++){
-        //     var item = task_list[i];
-        //     if (item === null) continue;
-        //     var $task = render_task_tpl(item, i);
-        //     if (item.complete) {
-        //         $task.addClass("completed");
-        //         $task_list.append($task);
-        //     } else {
-        //         $task_list.prepend($task);
-        //     }
-        // }
 
         var taks_complete = [];
         for (let i = 0; i < task_list.length; i++){
